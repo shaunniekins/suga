@@ -44,3 +44,6 @@ app.*.map.json
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 graft/
+
+# Vercel CLI project link and prebuilt output (vercel link / vercel build).
+.vercel/

@@ -12,6 +12,10 @@ flutter test             # unit + widget tests in test/
 dart format lib test
 flutter build apk --debug  # verifies the Android Gradle setup
 flutter build web          # verifies the web build (dart:js_interop code)
+./tool/build_site.sh       # landing page + web app, as deployed (build/site)
+python3 tool/serve_site.py         # preview build/site with vercel.json's rewrites + headers
+python3 tool/serve_site.py website # preview the static pages only, no build
+./tool/store/generate.sh   # store screenshots + website images (needs cwebp)
 ```
 
 Run `analyze` and `test` before declaring a change done. Run the APK build after
@@ -82,6 +86,38 @@ Audio flows mic → `AudioAnalyzer` → `StageDirector` → `Stage` → visualiz
   lamp shows the same file. After changing it, run
   `dart run flutter_launcher_icons` to regenerate the Android, iOS and web
   icons from the `flutter_launcher_icons` section of `pubspec.yaml`.
+- **Website and hosting:** `website/` is hand-written static HTML/CSS/JS,
+  deployed with the web app on Vercel (`vercel.json`, `tool/build_site.sh`):
+  landing at `/`, app at `/app/` (built with `--base-href /app/`). Keep all
+  JavaScript in `website/site.js` and styles in `website/styles.css`: the
+  landing pages' Content Security Policy forbids inline scripts and styles.
+  The microphone is only allowed on `/app/` (`Permissions-Policy`).
+- **No third parties on the web:** the web app is built with
+  `--no-web-resources-cdn` and bundles Roboto (`assets/fonts/`), so it never
+  contacts Google's CDNs. The privacy policy promises this. Don't add CDN
+  fonts, analytics or remote scripts without updating `website/privacy.html`.
+- **Previewing the site:** use `tool/serve_site.py`, not `python3 -m
+  http.server` or `file://`: it applies `vercel.json` (clean `/privacy` and
+  `/terms` URLs, redirects, CSP and Permissions-Policy), so a CSP violation or
+  broken route shows up locally. Check the browser console for CSP errors
+  after changing `website/`.
+- **Deploying:** the repo is set up for one Vercel project that builds both
+  the landing page and the web app (README → Deploy to Vercel, option A).
+  Keep `vercel.json` as the single source of routes and headers; if the
+  hosting setup changes (two projects, or prebuilt deploys), update the README
+  section with it.
+- **Flutter version on Vercel** is pinned in `tool/build_site.sh`
+  (`FLUTTER_VERSION`); keep it in step with the version used locally.
+- **Store listing:** the copy (name, descriptions, keywords) lives in
+  `README.md`, the per-store checklist and privacy-form answers in
+  `store/README.md`. Claims must stay true to the app. After a visible UI
+  change, rerun `./tool/store/generate.sh` (images are rendered from the real
+  widgets by `tool/store/store_assets_test.dart`).
+- **App ID** `com.shaunniekins.suga` (Android and iOS) is permanent once
+  published; never change it after the first store upload.
+- **Privacy-relevant changes** (a new permission, SDK, network request or
+  stored data) need `website/privacy.html`, the Play Data safety form and
+  Apple's App Privacy answers updated *before* release.
 - **No `print`:** log with `dart:developer` `log(..., name: 'suga')`.
 - The microphone doesn't work on most emulators; test audio behavior on a
   real device. For the web, Chrome's `--use-fake-device-for-media-stream
