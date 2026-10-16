@@ -41,9 +41,15 @@ Audio flows mic → `AudioAnalyzer` → `StageDirector` → `Stage` → visualiz
   usually use a `CustomPainter`. Detect a beat in `didUpdateWidget` by
   comparing `stage.beats` with the old widget's value. Use `stage.time` for
   animation, never wall-clock time.
+- The modes the user cycles through come from `ModeLineup`
+  (`models/mode_lineup.dart`): their order plus which are off, saved by
+  `ModeLineupStore`. Step through modes with `lineup.step(mode, ±1)`, never
+  `ColorMode.values`. A lineup always keeps at least one mode on.
 - To add a mode: add a value to `ColorMode` (label + icon), a widget in
-  `widgets/visualizers/`, and a case in `Visualizer`'s switch.
+  `widgets/visualizers/`, and a case in `Visualizer`'s switch. Saved
+  lineups pick up new modes automatically (appended, switched on).
   `test/widget_test.dart` loops over `ColorMode.values` automatically.
+  Don't rename existing `ColorMode` values: saved lineups store their names.
 
 ## Rules
 
@@ -71,6 +77,11 @@ Audio flows mic → `AudioAnalyzer` → `StageDirector` → `Stage` → visualiz
 - **Platforms:** only Android, iOS and web are supported. Don't import
   `dart:io`, `audio_streamer` or `permission_handler` outside the
   `*_device.dart` files, or `package:web` outside the `*_web.dart` files.
+- **App icon:** the source is `assets/icons/app_icon_source.png` (plus
+  `app_icon_foreground.png` for Android's adaptive icon); the home screen's
+  lamp shows the same file. After changing it, run
+  `dart run flutter_launcher_icons` to regenerate the Android, iOS and web
+  icons from the `flutter_launcher_icons` section of `pubspec.yaml`.
 - **No `print`:** log with `dart:developer` `log(..., name: 'suga')`.
 - The microphone doesn't work on most emulators; test audio behavior on a
   real device. For the web, Chrome's `--use-fake-device-for-media-stream

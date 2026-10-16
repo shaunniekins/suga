@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:suga/audio/audio_analyzer.dart';
-import 'package:suga/models/color_mode.dart';
 import 'package:suga/visuals/palette.dart';
 import 'package:suga/visuals/stage.dart';
 
@@ -64,17 +63,6 @@ void main() {
     expect(at(1).color(0), at(0).color(1));
     expect(at(0).palette, palettes[0]);
     expect(at(Stage.beatsPerPalette).palette, palettes[1]);
-  });
-
-  test('ColorMode.next cycles through every mode', () {
-    var mode = ColorMode.values.first;
-    final seen = <ColorMode>{};
-    for (var i = 0; i < ColorMode.values.length; i++) {
-      seen.add(mode);
-      mode = mode.next;
-    }
-    expect(seen, ColorMode.values.toSet());
-    expect(mode, ColorMode.values.first);
   });
 
   test('colorAt hits the end stops exactly', () {

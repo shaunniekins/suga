@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// The ways Suga can turn sound into light, in the order the mode
-/// switcher cycles through them.
+/// The ways Suga can turn sound into light, in their default order. The
+/// user's own order and choice live in `ModeLineup`.
 enum ColorMode {
   disco('Disco', Icons.nightlife_rounded),
   spectrum('Spectrum', Icons.graphic_eq_rounded),
@@ -16,6 +16,4 @@ enum ColorMode {
 
   final String label;
   final IconData icon;
-
-  ColorMode get next => values[(index + 1) % values.length];
 }

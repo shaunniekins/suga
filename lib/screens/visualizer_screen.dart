@@ -7,8 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:suga/app/theme.dart';
 import 'package:suga/audio/audio_analyzer.dart';
 import 'package:suga/models/color_mode.dart';
+import 'package:suga/models/mode_lineup.dart';
 import 'package:suga/services/microphone_audio.dart';
+import 'package:suga/services/mode_lineup_store.dart';
 import 'package:suga/visuals/stage.dart';
+import 'package:suga/widgets/mode_lineup_sheet.dart';
 import 'package:suga/widgets/mode_switcher.dart';
 import 'package:suga/widgets/visualizers/visualizer.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -38,7 +41,10 @@ class _VisualizerScreenState extends State<VisualizerScreen>
   StreamSubscription<List<double>>? _subscription;
   Timer? _hideControls;
 
+  final _lineupStore = ModeLineupStore();
+  ModeLineup _lineup = ModeLineup();
   ColorMode _mode = ColorMode.values.first;
+  int _direction = 1;
   late Stage _stage;
   bool _controlsVisible = true;
   bool _micFailed = false;
@@ -50,6 +56,16 @@ class _VisualizerScreenState extends State<VisualizerScreen>
     _keepAwake(true);
     _listen();
     _showControls();
+    unawaited(_loadLineup());
+  }
+
+  Future<void> _loadLineup() async {
+    final lineup = await _lineupStore.load();
+    if (!mounted) return;
+    setState(() {
+      _lineup = lineup;
+      _mode = lineup.enabled.first;
+    });
   }
 
   @override
@@ -143,9 +159,31 @@ class _VisualizerScreenState extends State<VisualizerScreen>
     }
   }
 
-  void _nextMode() {
-    setState(() => _mode = _mode.next);
+  void _stepMode(int step) {
+    setState(() {
+      _direction = step;
+      _mode = _lineup.step(_mode, step);
+    });
     _showControls();
+  }
+
+  void _changeLineup(ModeLineup lineup) {
+    setState(() {
+      _lineup = lineup;
+      // If the current mode was switched off, move on to the next one.
+      if (!lineup.isEnabled(_mode)) _mode = lineup.step(_mode, 1);
+    });
+    unawaited(_lineupStore.save(lineup));
+  }
+
+  Future<void> _customizeModes() async {
+    _hideControls?.cancel();
+    await showModeLineupSheet(
+      context,
+      lineup: _lineup,
+      onChanged: _changeLineup,
+    );
+    if (mounted) _showControls();
   }
 
   @override
@@ -183,22 +221,27 @@ class _VisualizerScreenState extends State<VisualizerScreen>
                       children: [
                         Align(
                           alignment: Alignment.topLeft,
-                          child: IconButton.filled(
+                          child: _ControlButton(
                             tooltip: 'Close',
-                            style: IconButton.styleFrom(
-                              backgroundColor: SugaColors.scrim,
-                              foregroundColor: SugaColors.ice,
-                              minimumSize: const Size.square(52),
-                            ),
+                            icon: Icons.close_rounded,
                             onPressed: () => Navigator.of(context).maybePop(),
-                            icon: const Icon(Icons.close_rounded),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: _ControlButton(
+                            tooltip: 'Customize modes',
+                            icon: Icons.tune_rounded,
+                            onPressed: _customizeModes,
                           ),
                         ),
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: ModeSwitcher(
                             mode: _mode,
-                            onPressed: _nextMode,
+                            modes: _lineup.enabled,
+                            direction: _direction,
+                            onStep: _stepMode,
                           ),
                         ),
                       ],
@@ -210,6 +253,32 @@ class _VisualizerScreenState extends State<VisualizerScreen>
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ControlButton extends StatelessWidget {
+  const _ControlButton({
+    required this.tooltip,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  final String tooltip;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton.filled(
+      tooltip: tooltip,
+      style: IconButton.styleFrom(
+        backgroundColor: SugaColors.scrim,
+        foregroundColor: SugaColors.ice,
+        minimumSize: const Size.square(52),
+      ),
+      onPressed: onPressed,
+      icon: Icon(icon),
     );
   }
 }

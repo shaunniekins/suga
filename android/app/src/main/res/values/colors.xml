@@ -2,4 +2,6 @@
 <resources>
     <!-- Matches SugaColors.night in lib/app/theme.dart. -->
     <color name="suga_night">#0E161D</color>
+    <!-- Adaptive launcher icon background (from flutter_launcher_icons). -->
+    <color name="ic_launcher_background">#00235c</color>
 </resources>
