@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   permission_handler: ^12.0.3
+  shared_preferences: ^2.5.5
   wakelock_plus: ^1.6.1
   web: ^1.1.1
 
@@ -18,10 +19,23 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
   assets:
-    # Cropped from assets/images/suga-logo.jpeg (the full source artwork,
-    # kept out of the bundle).
-    - assets/images/suga-mark.jpg
+    - assets/icons/app_icon_source.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/icons/app_icon_source.png
+  adaptive_icon_background: "#00235c"
+  adaptive_icon_foreground: assets/icons/app_icon_foreground.png
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: assets/icons/app_icon_source.png
+    # Matches SugaColors.night in lib/app/theme.dart.
+    background_color: "#0E161D"
+    theme_color: "#0E161D"

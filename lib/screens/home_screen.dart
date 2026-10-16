@@ -259,7 +259,7 @@ class _LampState extends State<_Lamp> with SingleTickerProviderStateMixin {
             clipBehavior: Clip.antiAlias,
             color: SugaColors.slate,
             child: Ink.image(
-              image: const AssetImage('assets/images/suga-mark.jpg'),
+              image: const AssetImage('assets/icons/app_icon_source.png'),
               fit: BoxFit.cover,
               width: widget.size,
               height: widget.size,
