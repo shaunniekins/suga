@@ -1,13 +1,14 @@
 name: suga
 description: "Turns ambient sound into light — a microphone-driven color visualizer."
 publish_to: "none"
-version: 0.1.0
+version: 1.0.0+1
 
 environment:
   sdk: ^3.8.1
 
 dependencies:
   audio_streamer: ^4.3.0
+  cupertino_icons: ^1.0.9
   flutter:
     sdk: flutter
   permission_handler: ^12.0.3
@@ -23,6 +24,19 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # Bundled so the web app never fetches Roboto from Google's font CDN (and
+  # every platform renders the same type). Light also serves weight 200.
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 700
   assets:
     - assets/icons/app_icon_source.png
 

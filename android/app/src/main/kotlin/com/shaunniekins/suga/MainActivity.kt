@@ -1,4 +1,4 @@
-package com.example.suga
+package com.shaunniekins.suga
 
 import io.flutter.embedding.android.FlutterActivity
 
