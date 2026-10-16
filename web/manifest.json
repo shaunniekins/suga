@@ -1,12 +1,12 @@
 {
-    "name": "suga",
-    "short_name": "suga",
+    "name": "Suga",
+    "short_name": "Suga",
     "start_url": ".",
-    "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "display": "fullscreen",
+    "background_color": "#0E161D",
+    "theme_color": "#0E161D",
+    "description": "Turns music into light: a beat-reactive, full-screen color visualizer.",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {

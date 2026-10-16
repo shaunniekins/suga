@@ -1,21 +1,24 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:suga/widgets/home_page.dart';
+import 'package:flutter/services.dart';
+import 'package:suga/app/theme.dart';
+import 'package:suga/screens/home_screen.dart';
 
-void main() => runApp(NoiseMeterApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  runApp(const SugaApp());
+}
 
-class NoiseMeterApp extends StatelessWidget {
+class SugaApp extends StatelessWidget {
+  const SugaApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: AnimatedSplashScreen(
-      splash: ClipOval(
-        child: Image.asset(
-          'assets/images/suga-logo.jpeg',
-          fit: BoxFit.cover,
-        ),
-      ),
-      nextScreen: const HomePage(),
-    ));
+      title: 'Suga',
+      debugShowCheckedModeBanner: false,
+      theme: buildSugaTheme(),
+      home: const HomeScreen(),
+    );
   }
 }
