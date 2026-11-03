@@ -92,6 +92,12 @@ Audio flows mic → `AudioAnalyzer` → `StageDirector` → `Stage` → visualiz
   JavaScript in `website/site.js` and styles in `website/styles.css`: the
   landing pages' Content Security Policy forbids inline scripts and styles.
   The microphone is only allowed on `/app/` (`Permissions-Policy`).
+- **SEO:** `website/sitemap.xml`, `robots.txt` and `llms.txt` (a plain-text
+  summary for AI assistants) sit beside the pages; the landing page carries
+  JSON-LD structured data (a data block, which the CSP allows) and a
+  visible FAQ that it mirrors. When you add a page, add it to the sitemap;
+  when features, modes, platforms or store links change, update the
+  JSON-LD, FAQ and `llms.txt` with them, and bump `<lastmod>`.
 - **No third parties on the web:** the web app is built with
   `--no-web-resources-cdn` and bundles Roboto (`assets/fonts/`), so it never
   contacts Google's CDNs. The privacy policy promises this. Don't add CDN

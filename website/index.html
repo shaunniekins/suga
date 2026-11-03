@@ -3,23 +3,125 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Suga — turn music into light</title>
-  <meta name="description" content="Suga is a beat-reactive music visualizer. Put on a song and your screen lights up in time with it: disco beams, Winamp-style bars and more. Nothing is recorded.">
+  <title>Suga: Music Visualizer — turn music into light, free on Android and web</title>
+  <meta name="description" content="Suga is a free, beat-reactive music visualizer for Android and the browser. Put on a song and your screen lights up in time with it: disco beams, Winamp-style bars and more. Nothing is recorded.">
   <link rel="canonical" href="https://suga.shaunniekins.com/">
   <meta name="theme-color" content="#0E161D">
   <meta property="og:title" content="Suga — turn music into light">
   <meta property="og:description" content="Put on a song and watch your screen light up to the beat. Eight modes, from disco beams to Winamp-style bars. Nothing is recorded.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Suga">
+  <meta property="og:locale" content="en_US">
   <meta property="og:url" content="https://suga.shaunniekins.com/">
   <meta property="og:image" content="https://suga.shaunniekins.com/assets/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Suga's colorful, beat-reactive light modes on a phone screen.">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Suga — turn music into light">
+  <meta name="twitter:description" content="Put on a song and watch your screen light up to the beat. Eight modes, from disco beams to Winamp-style bars. Nothing is recorded.">
+  <meta name="twitter:image" content="https://suga.shaunniekins.com/assets/og.jpg">
+  <meta name="google-play-app" content="app-id=com.shaunniekins.suga">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Suga, summarized for AI assistants">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="preload" href="/assets/fonts/sora.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/styles.css">
   <script src="/site.js" defer></script>
+  <!-- Structured data for search engines and AI assistants. A data block, not
+       a script, so the Content Security Policy doesn't block it. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://suga.shaunniekins.com/#website",
+        "url": "https://suga.shaunniekins.com/",
+        "name": "Suga",
+        "alternateName": "Suga: Music Visualizer",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "Person",
+        "@id": "https://suga.shaunniekins.com/#author",
+        "name": "shaunniekins",
+        "url": "https://buymeacoffee.com/shaunniekins",
+        "email": "mailto:contact@shaunniekins.com"
+      },
+      {
+        "@type": "MobileApplication",
+        "@id": "https://suga.shaunniekins.com/#android",
+        "name": "Suga: Music Visualizer",
+        "description": "A beat-reactive music visualizer that listens through the microphone and fills the screen with light that moves with the music. Eight modes, from disco beams to Winamp-style spectrum bars. Nothing is recorded.",
+        "operatingSystem": "Android",
+        "applicationCategory": "MultimediaApplication",
+        "applicationSubCategory": "Music visualizer",
+        "url": "https://suga.shaunniekins.com/",
+        "downloadUrl": "https://play.google.com/store/apps/details?id=com.shaunniekins.suga",
+        "installUrl": "https://play.google.com/store/apps/details?id=com.shaunniekins.suga",
+        "image": "https://suga.shaunniekins.com/assets/og.jpg",
+        "screenshot": [
+          "https://suga.shaunniekins.com/assets/screens/disco.webp",
+          "https://suga.shaunniekins.com/assets/screens/spectrum.webp",
+          "https://suga.shaunniekins.com/assets/screens/pulse.webp"
+        ],
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@id": "https://suga.shaunniekins.com/#author" },
+        "sameAs": ["https://play.google.com/store/apps/details?id=com.shaunniekins.suga"]
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://suga.shaunniekins.com/#web",
+        "name": "Suga: Music Visualizer (web)",
+        "description": "The browser version of Suga: a beat-reactive, full-screen music visualizer. Allow the microphone, play a song, and the screen lights up to the beat.",
+        "url": "https://suga.shaunniekins.com/app/",
+        "browserRequirements": "Requires a modern browser with microphone access.",
+        "operatingSystem": "Any",
+        "applicationCategory": "MultimediaApplication",
+        "applicationSubCategory": "Music visualizer",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@id": "https://suga.shaunniekins.com/#author" }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://suga.shaunniekins.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Suga?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Suga is a free music visualizer for Android and the web. It listens through your microphone, finds the beat, and fills your screen with color that moves with the music, like the Winamp visualizers you remember." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Suga work with Spotify, YouTube or any music app?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Suga listens through the microphone, so it reacts to anything you can hear: a speaker, a TV, a music app on another device, a guitar, or a room full of people singing." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Suga record my audio?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. Suga only measures the sound on your device while the show is running. Audio is never recorded, saved or sent anywhere, and there are no ads, accounts or analytics." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Suga free?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Suga is free on Google Play and in your browser, with no ads and no sign-up." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there an iPhone version?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The iPhone and iPad app is on the way. Until then, the browser version works on iPhone and iPad today." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Suga safe for people sensitive to flashing light?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Full-screen flashes are kept below three per second, the limit accessibility guidelines set for flashing content, and with reduced motion on the beat pulse switches off. If you or anyone watching is sensitive to flashing light, please take care." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -52,9 +154,11 @@
             <span class="cta-note">Free · No account · Nothing recorded</span>
           </div>
           <ul class="stores" aria-label="Mobile apps">
-            <li class="store-badge">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3.5v17l9-8.5-9-8.5Z"/><path d="m14 12 3.5-3.3 2.4 1.4c1.1.6 1.1 1.2 0 1.8L17.5 15.3Z"/></svg>
-              <span><small>Coming soon to</small><strong>Google Play</strong></span>
+            <li>
+              <a class="store-badge" href="https://play.google.com/store/apps/details?id=com.shaunniekins.suga" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3.5v17l9-8.5-9-8.5Z"/><path d="m14 12 3.5-3.3 2.4 1.4c1.1.6 1.1 1.2 0 1.8L17.5 15.3Z"/></svg>
+                <span><small>Get it on</small><strong>Google Play</strong></span>
+              </a>
             </li>
             <li class="store-badge">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>
@@ -168,7 +272,7 @@
           <li class="extra">
             <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="12" rx="2"/><path d="M8 20.5h8M12 16.5v4"/></svg>
             <h3>Phone, tablet or browser</h3>
-            <p>Android, iPhone and iPad apps are on the way. The browser version works today.</p>
+            <p>Get it on Google Play for Android, or use it in your browser today. iPhone and iPad apps are on the way.</p>
           </li>
         </ul>
       </div>
@@ -204,6 +308,40 @@
       </div>
     </section>
 
+    <section class="section" id="faq">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Questions</h2>
+        </div>
+        <dl class="faq">
+          <div>
+            <dt>What is Suga?</dt>
+            <dd>A free music visualizer for Android and the web. It listens through your microphone, finds the beat, and fills your screen with color that moves with the music.</dd>
+          </div>
+          <div>
+            <dt>Does it work with Spotify, YouTube or any music app?</dt>
+            <dd>Yes. Suga listens through the microphone, so it reacts to anything you can hear: a speaker, a TV, a music app on another device, a guitar, or a room full of people singing.</dd>
+          </div>
+          <div>
+            <dt>Does it record my audio?</dt>
+            <dd>No. Sound is measured on your device while the show runs and discarded right away. Nothing is saved or sent anywhere.</dd>
+          </div>
+          <div>
+            <dt>Is it free?</dt>
+            <dd>Yes — on <a href="https://play.google.com/store/apps/details?id=com.shaunniekins.suga" rel="noopener">Google Play</a> and <a href="/app/">in your browser</a>, with no ads and no sign-up.</dd>
+          </div>
+          <div>
+            <dt>Is there an iPhone version?</dt>
+            <dd>The iPhone and iPad app is on the way. Until then, the browser version works on iPhone and iPad today.</dd>
+          </div>
+          <div>
+            <dt>Is it safe for people sensitive to flashing light?</dt>
+            <dd>Full-screen flashes stay below three a second, the limit accessibility guidelines set, and reduced motion switches the beat pulse off. If anyone watching is sensitive to flashing light, please take care.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
     <section class="section" id="support">
       <div class="wrap">
         <div class="section-head">
@@ -230,9 +368,10 @@
     <section class="section closing">
       <div class="wrap">
         <h2>Turn it up.</h2>
-        <p>Suga runs in your browser right now. Allow the microphone, play something, and let it shine.</p>
+        <p>Get Suga on Google Play, or run it in your browser right now. Allow the microphone, play something, and let it shine.</p>
         <div class="cta-row">
           <a class="button" href="/app/">Open Suga in your browser</a>
+          <a class="button button-ghost" href="https://play.google.com/store/apps/details?id=com.shaunniekins.suga" rel="noopener">Get it on Google Play</a>
         </div>
       </div>
     </section>
@@ -242,6 +381,7 @@
     <div class="wrap">
       <span>© <span data-year>2026</span> Suga</span>
       <nav aria-label="Footer">
+        <a href="https://play.google.com/store/apps/details?id=com.shaunniekins.suga" rel="noopener">Google Play</a>
         <a href="/privacy">Privacy policy</a>
         <a href="/terms">Terms of use</a>
         <a href="https://buymeacoffee.com/shaunniekins" rel="noopener">Buy me a coffee</a>

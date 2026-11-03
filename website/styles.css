@@ -84,12 +84,16 @@ h1, h2, h3 { font-family: "Sora", "Inter", system-ui, sans-serif; line-height: 1
 }
 .button svg { width: 20px; height: 20px; flex: none; }
 .button:hover { background: #fff; box-shadow: 0 0 32px 4px rgba(77, 163, 240, 0.45); }
+.button-ghost { background: transparent; color: var(--ice); box-shadow: inset 0 0 0 1px var(--rule); }
+.button-ghost:hover { background: rgba(230, 238, 244, 0.08); box-shadow: inset 0 0 0 1px rgba(77, 163, 240, 0.6); }
 .cta-note { font-size: 14px; color: var(--mist); }
 
 .stores { list-style: none; margin: 26px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px; }
 .store-badge { display: inline-flex; align-items: center; gap: 10px; padding: 9px 18px 9px 14px; border-radius: 14px; border: 1px solid var(--rule); color: var(--mist); background: rgba(14, 22, 29, 0.5); }
 .store-badge svg { width: 22px; height: 22px; flex: none; }
 .store-badge small { display: block; font: 500 10.5px/1.2 "Inter", sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
+a.store-badge { text-decoration: none; transition: border-color 0.2s ease, background 0.2s ease; }
+a.store-badge:hover { border-color: rgba(77, 163, 240, 0.6); background: rgba(28, 43, 55, 0.9); }
 .store-badge strong { display: block; font: 600 16px/1.25 "Sora", sans-serif; color: var(--ice); }
 
 /* Phone frame around real app renders */
@@ -139,6 +143,12 @@ section { scroll-margin-top: 24px; }
 .checks svg { width: 22px; height: 22px; color: var(--signal); margin-top: 2px; }
 .checks strong { display: block; font-weight: 600; }
 .checks span { color: var(--mist); font-size: 15px; }
+
+/* Questions */
+.faq { margin: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 clamp(24px, 4vw, 56px); }
+.faq div { padding: 22px 0 24px; border-top: 1px solid var(--rule); }
+.faq dt { font: 600 18px/1.35 "Sora", sans-serif; }
+.faq dd { margin: 8px 0 0; color: var(--mist); font-size: 16px; }
 
 /* Community & support */
 .support { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 360px)); gap: 16px; }
@@ -195,7 +205,7 @@ section { scroll-margin-top: 24px; }
 }
 @media (max-width: 560px) {
   body { font-size: 16px; }
-  .steps, .extras, .support { grid-template-columns: 1fr; }
+  .steps, .extras, .support, .faq { grid-template-columns: 1fr; }
   .site-nav .hide-sm { display: none; }
   .modes { gap: 14px; }
   .mode h3 { font-size: 17px; margin-top: 12px; }
