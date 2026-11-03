@@ -1,0 +1,39 @@
+# Suga: Music Visualizer
+
+> Suga is a free, beat-reactive music visualizer for Android and the web. It listens through the microphone, finds the beat, and fills the screen with color that moves with the music, like the Winamp visualizers people remember. Nothing is recorded.
+
+Suga reacts to any sound it can hear (a speaker, a TV, a music app on another device, a guitar, a room full of people singing), so it works with Spotify, YouTube, Apple Music or any other source. It is made by one independent developer. "Suga" means "light" in Cebuano.
+
+- Price: free. No ads, no account, no analytics.
+- Platforms: Android (Google Play) and any modern browser. iPhone and iPad apps are on the way; the browser version works on them today.
+- Privacy: the microphone is used only to measure sound on the device while the show runs. Audio is never recorded, saved or sent anywhere. The Android app doesn't request internet access.
+- Photosensitivity: full-screen flashes are kept below three per second, and the system reduced-motion setting switches off the beat pulse.
+
+## Get it
+
+- [Google Play (Android)](https://play.google.com/store/apps/details?id=com.shaunniekins.suga): install Suga on Android phones and tablets
+- [Web app](https://suga.shaunniekins.com/app/): runs in the browser, no install
+- [Website](https://suga.shaunniekins.com/): features, screenshots and FAQ
+
+## Modes
+
+- Disco: colored beams sweep from a center light while mirror-ball sparkles drift by
+- Spectrum: Winamp-style bars from bass to treble, with falling peak caps
+- Pulse: a ring of color bursts out on every beat around a spinning spectrum
+- Assorted: a new color on every beat, brighter when the music is louder
+- Black & white: the whole screen flips between black and white on the beat
+- Gradient: a glow in the palette's color that swells with the music
+- Tiles: a mosaic that sparkles with sound and bursts on the beat
+- Level: a full-screen LED meter with a peak marker that falls slowly
+
+Users can switch modes by tapping or swiping the mode button, hide modes they don't use and reorder the rest. Five palettes (Neon, Sunset, Acid, Ocean and Fire) shift color on every beat. The show runs full screen and keeps the screen awake.
+
+## Good fits
+
+House parties, DJ sets and practice, karaoke, ambient light for a room, a light show on a TV or tablet, or a nostalgic Winamp-style visualizer.
+
+## More
+
+- [Privacy policy](https://suga.shaunniekins.com/privacy)
+- [Terms of use](https://suga.shaunniekins.com/terms)
+- Contact: contact@shaunniekins.com

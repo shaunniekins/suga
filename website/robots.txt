@@ -1,0 +1,6 @@
+# Suga — https://suga.shaunniekins.com
+# Everything here is public. Search engines and AI crawlers are welcome.
+User-agent: *
+Allow: /
+
+Sitemap: https://suga.shaunniekins.com/sitemap.xml
