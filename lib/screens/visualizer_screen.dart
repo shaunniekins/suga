@@ -10,9 +10,11 @@ import 'package:suga/models/color_mode.dart';
 import 'package:suga/models/mode_lineup.dart';
 import 'package:suga/services/microphone_audio.dart';
 import 'package:suga/services/mode_lineup_store.dart';
+import 'package:suga/services/music_launcher.dart';
 import 'package:suga/visuals/stage.dart';
 import 'package:suga/widgets/mode_lineup_sheet.dart';
 import 'package:suga/widgets/mode_switcher.dart';
+import 'package:suga/widgets/music_apps_sheet.dart';
 import 'package:suga/widgets/visualizers/visualizer.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -20,10 +22,17 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 ///
 /// Expects microphone access to have been granted already.
 class VisualizerScreen extends StatefulWidget {
-  const VisualizerScreen({super.key, this.microphone});
+  const VisualizerScreen({
+    super.key,
+    this.microphone,
+    this.openMusic = openMusicApp,
+  });
 
   /// Injectable for tests; defaults to the device microphone.
   final MicrophoneAudio? microphone;
+
+  /// Opens a music app; injectable so tests don't leave the app.
+  final MusicLauncher openMusic;
 
   @override
   State<VisualizerScreen> createState() => _VisualizerScreenState();
@@ -36,6 +45,7 @@ class _VisualizerScreenState extends State<VisualizerScreen>
   late final MicrophoneAudio _microphone =
       widget.microphone ?? createMicrophone();
   late final Ticker _ticker = createTicker(_onTick);
+  late final AppLifecycleListener _lifecycle;
   late AudioAnalyzer _analyzer;
   late StageDirector _director;
   StreamSubscription<List<double>>? _subscription;
@@ -54,6 +64,7 @@ class _VisualizerScreenState extends State<VisualizerScreen>
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     _keepAwake(true);
+    _lifecycle = AppLifecycleListener(onHide: _pause, onShow: _resume);
     _listen();
     _showControls();
     unawaited(_loadLineup());
@@ -70,6 +81,7 @@ class _VisualizerScreenState extends State<VisualizerScreen>
 
   @override
   void dispose() {
+    _lifecycle.dispose();
     _ticker.dispose();
     _subscription?.cancel();
     _hideControls?.cancel();
@@ -137,6 +149,22 @@ class _VisualizerScreenState extends State<VisualizerScreen>
     setState(() => _stage = _director.advance(elapsed, calm: calm));
   }
 
+  /// Stops listening while Suga is in the background (for example while the
+  /// user starts a song in a music app). Mobile platforms cut the
+  /// microphone off there anyway, and iOS may not resume it on its own.
+  void _pause() {
+    _subscription?.cancel();
+    _subscription = null;
+    _ticker.stop();
+  }
+
+  void _resume() {
+    // Android shows the system bars again after another app was in front.
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    if (_micFailed || _subscription != null) return;
+    _listen();
+  }
+
   void _retry() {
     setState(() => _micFailed = false);
     _listen();
@@ -186,6 +214,12 @@ class _VisualizerScreenState extends State<VisualizerScreen>
     if (mounted) _showControls();
   }
 
+  Future<void> _playMusic() async {
+    _hideControls?.cancel();
+    await showMusicAppsSheet(context, launch: widget.openMusic);
+    if (mounted) _showControls();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_micFailed) return _MicrophoneError(onRetry: _retry);
@@ -229,10 +263,21 @@ class _VisualizerScreenState extends State<VisualizerScreen>
                         ),
                         Align(
                           alignment: Alignment.topRight,
-                          child: _ControlButton(
-                            tooltip: 'Customize modes',
-                            icon: Icons.tune_rounded,
-                            onPressed: _customizeModes,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            spacing: 12,
+                            children: [
+                              _ControlButton(
+                                tooltip: 'Play music',
+                                icon: Icons.library_music_rounded,
+                                onPressed: _playMusic,
+                              ),
+                              _ControlButton(
+                                tooltip: 'Customize modes',
+                                icon: Icons.tune_rounded,
+                                onPressed: _customizeModes,
+                              ),
+                            ],
                           ),
                         ),
                         Align(

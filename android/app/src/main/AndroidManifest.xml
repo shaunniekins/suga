@@ -37,6 +37,13 @@
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
+        <!-- The music apps the Play music sheet opens. Since Android 11 an app
+             can't open a link in an app it can't see (url_launcher's
+             externalNonBrowserApplication), so the installed app would be
+             reported as missing. Keep in sync with lib/models/music_app.dart. -->
+        <package android:name="com.spotify.music" />
+        <package android:name="com.google.android.apps.youtube.music" />
+        <package android:name="com.apple.android.music" />
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
