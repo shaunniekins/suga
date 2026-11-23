@@ -61,7 +61,22 @@ Screenshot order tells the story: **01** the light show → **02** spectrum →
 | Data safety | **No data collected, no data shared.** The microphone is used on-device only and audio never leaves the device, which Google doesn't count as collection. No encryption-in-transit question applies (nothing is transmitted). Data deletion: not applicable (nothing collected). |
 | Government / financial / health apps | Not applicable |
 
-**Release notes** for 1.0.0: `First release.`
+**Release notes** (newest first; Play limit 500 characters per language):
+
+- **1.1.0** (build 2), release name `1.1.0 (2) – Twelve modes`:
+  ```
+  Four new modes inspired by classic Winamp visualizers:
+  • Scope: the live waveform as a glowing oscilloscope line
+  • Starfield: fly through stars that surge on every beat
+  • Tunnel: rings of sound zoom outward and twist
+  • Kaleido: the waveform mirrored into a kaleidoscope
+
+  Also new:
+  • Swipe anywhere on the screen to change mode
+  • Modes are now in alphabetical order
+  • The show picks up again right away when you come back to Suga
+  ```
+- **1.0.0** (build 1): `First release.`
 
 ## App Store Connect
 
