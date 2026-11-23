@@ -86,4 +86,19 @@ void main() {
     expect(loudestBand(80), lessThan(6));
     expect(loudestBand(8000), greaterThan(16));
   });
+
+  test(
+    'the waveform fills the scope for steady music and stays flat in silence',
+    () {
+      double swing(List<AudioFrame> frames) {
+        final wave = frames.last.wave;
+        expect(wave, hasLength(AudioAnalyzer.wavePoints));
+        expect(wave.every((v) => v >= -1 && v <= 1), isTrue);
+        return wave.reduce(max) - wave.reduce(min);
+      }
+
+      expect(swing(analyze(track(2, toneHz: 110))), greaterThan(0.5));
+      expect(swing(analyze(track(2))), lessThan(0.1));
+    },
+  );
 }

@@ -10,9 +10,11 @@ import 'package:suga/models/color_mode.dart';
 import 'package:suga/models/mode_lineup.dart';
 import 'package:suga/services/microphone_audio.dart';
 import 'package:suga/services/mode_lineup_store.dart';
+import 'package:suga/services/music_launcher.dart';
 import 'package:suga/visuals/stage.dart';
 import 'package:suga/widgets/mode_lineup_sheet.dart';
 import 'package:suga/widgets/mode_switcher.dart';
+import 'package:suga/widgets/music_apps_sheet.dart';
 import 'package:suga/widgets/visualizers/visualizer.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -20,10 +22,17 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 ///
 /// Expects microphone access to have been granted already.
 class VisualizerScreen extends StatefulWidget {
-  const VisualizerScreen({super.key, this.microphone});
+  const VisualizerScreen({
+    super.key,
+    this.microphone,
+    this.openMusic = openMusicApp,
+  });
 
   /// Injectable for tests; defaults to the device microphone.
   final MicrophoneAudio? microphone;
+
+  /// Opens a music app; injectable so tests don't leave the app.
+  final MusicLauncher openMusic;
 
   @override
   State<VisualizerScreen> createState() => _VisualizerScreenState();
@@ -33,9 +42,15 @@ class _VisualizerScreenState extends State<VisualizerScreen>
     with SingleTickerProviderStateMixin {
   static const _controlsTimeout = Duration(seconds: 3);
 
+  /// A drag this far, or a fling this fast, anywhere on the show changes
+  /// mode (matches the mode pill).
+  static const _swipeDistance = 48.0;
+  static const _swipeVelocity = 300.0;
+
   late final MicrophoneAudio _microphone =
       widget.microphone ?? createMicrophone();
   late final Ticker _ticker = createTicker(_onTick);
+  late final AppLifecycleListener _lifecycle;
   late AudioAnalyzer _analyzer;
   late StageDirector _director;
   StreamSubscription<List<double>>? _subscription;
@@ -48,12 +63,14 @@ class _VisualizerScreenState extends State<VisualizerScreen>
   late Stage _stage;
   bool _controlsVisible = true;
   bool _micFailed = false;
+  double _drag = 0;
 
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     _keepAwake(true);
+    _lifecycle = AppLifecycleListener(onHide: _pause, onShow: _resume);
     _listen();
     _showControls();
     unawaited(_loadLineup());
@@ -70,6 +87,7 @@ class _VisualizerScreenState extends State<VisualizerScreen>
 
   @override
   void dispose() {
+    _lifecycle.dispose();
     _ticker.dispose();
     _subscription?.cancel();
     _hideControls?.cancel();
@@ -137,21 +155,46 @@ class _VisualizerScreenState extends State<VisualizerScreen>
     setState(() => _stage = _director.advance(elapsed, calm: calm));
   }
 
+  /// Stops listening while Suga is in the background (for example while the
+  /// user starts a song in a music app). Mobile platforms cut the
+  /// microphone off there anyway, and iOS may not resume it on its own.
+  void _pause() {
+    _subscription?.cancel();
+    _subscription = null;
+    _ticker.stop();
+  }
+
+  void _resume() {
+    // Android shows the system bars again after another app was in front.
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    if (_micFailed || _subscription != null) return;
+    _listen();
+  }
+
   void _retry() {
     setState(() => _micFailed = false);
     _listen();
   }
 
+  /// Read from the platform, not MediaQuery, so it works in initState.
+  bool get _screenReaderOn => WidgetsBinding
+      .instance
+      .platformDispatcher
+      .accessibilityFeatures
+      .accessibleNavigation;
+
   void _showControls() {
     _hideControls?.cancel();
     setState(() => _controlsVisible = true);
+    // Screen reader users can't find controls that vanish; keep them up.
+    if (_screenReaderOn) return;
     _hideControls = Timer(_controlsTimeout, () {
       if (mounted) setState(() => _controlsVisible = false);
     });
   }
 
   void _toggleControls() {
-    if (_controlsVisible) {
+    if (_controlsVisible && !_screenReaderOn) {
       _hideControls?.cancel();
       setState(() => _controlsVisible = false);
     } else {
@@ -165,6 +208,20 @@ class _VisualizerScreenState extends State<VisualizerScreen>
       _mode = _lineup.step(_mode, step);
     });
     _showControls();
+  }
+
+  void _endSwipe(DragEndDetails details) {
+    final velocity = details.primaryVelocity ?? 0;
+    if (_lineup.enabled.length > 1) {
+      if (velocity.abs() >= _swipeVelocity) {
+        HapticFeedback.selectionClick();
+        _stepMode(velocity > 0 ? 1 : -1);
+      } else if (_drag.abs() >= _swipeDistance) {
+        HapticFeedback.selectionClick();
+        _stepMode(_drag > 0 ? 1 : -1);
+      }
+    }
+    _drag = 0;
   }
 
   void _changeLineup(ModeLineup lineup) {
@@ -186,15 +243,40 @@ class _VisualizerScreenState extends State<VisualizerScreen>
     if (mounted) _showControls();
   }
 
+  Future<void> _playMusic() async {
+    _hideControls?.cancel();
+    await showMusicAppsSheet(context, launch: widget.openMusic);
+    if (mounted) _showControls();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_micFailed) return _MicrophoneError(onRetry: _retry);
 
+    return CallbackShortcuts(
+      // Keyboard control for the web and tablets with keyboards.
+      bindings: {
+        const SingleActivator(LogicalKeyboardKey.arrowRight): () =>
+            _stepMode(1),
+        const SingleActivator(LogicalKeyboardKey.arrowLeft): () =>
+            _stepMode(-1),
+        const SingleActivator(LogicalKeyboardKey.space): _toggleControls,
+        const SingleActivator(LogicalKeyboardKey.keyM): _playMusic,
+        const SingleActivator(LogicalKeyboardKey.escape): () =>
+            Navigator.of(context).maybePop(),
+      },
+      child: Focus(autofocus: true, child: _buildShow(context)),
+    );
+  }
+
+  Widget _buildShow(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: _toggleControls,
+        onHorizontalDragUpdate: (details) => _drag += details.delta.dx,
+        onHorizontalDragEnd: _endSwipe,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -206,7 +288,9 @@ class _VisualizerScreenState extends State<VisualizerScreen>
               ),
               child: KeyedSubtree(
                 key: ValueKey(_mode),
-                child: Visualizer(mode: _mode, stage: _stage),
+                child: ExcludeSemantics(
+                  child: Visualizer(mode: _mode, stage: _stage),
+                ),
               ),
             ),
             SafeArea(
@@ -229,10 +313,21 @@ class _VisualizerScreenState extends State<VisualizerScreen>
                         ),
                         Align(
                           alignment: Alignment.topRight,
-                          child: _ControlButton(
-                            tooltip: 'Customize modes',
-                            icon: Icons.tune_rounded,
-                            onPressed: _customizeModes,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            spacing: 12,
+                            children: [
+                              _ControlButton(
+                                tooltip: 'Play music',
+                                icon: Icons.library_music_rounded,
+                                onPressed: _playMusic,
+                              ),
+                              _ControlButton(
+                                tooltip: 'Customize modes',
+                                icon: Icons.tune_rounded,
+                                onPressed: _customizeModes,
+                              ),
+                            ],
                           ),
                         ),
                         Align(

@@ -8,6 +8,9 @@ import 'package:suga/services/mode_lineup_store.dart';
 import 'package:suga/widgets/mode_lineup_sheet.dart';
 import 'package:suga/widgets/mode_switcher.dart';
 
+/// The default order, so tests don't depend on which mode comes where.
+final modes = ColorMode.values;
+
 void main() {
   group('ModeLineup', () {
     test('defaults to every mode, in order, all on', () {
@@ -16,17 +19,18 @@ void main() {
     });
 
     test('steps forward and back through enabled modes, wrapping', () {
-      final lineup = ModeLineup(hidden: {ColorMode.spectrum, ColorMode.level});
-      expect(lineup.step(ColorMode.disco, 1), ColorMode.pulse);
-      expect(lineup.step(ColorMode.pulse, -1), ColorMode.disco);
-      expect(lineup.step(ColorMode.disco, -1), ColorMode.tiles);
-      expect(lineup.step(ColorMode.tiles, 1), ColorMode.disco);
+      final lineup = ModeLineup(hidden: {modes[1], modes.last});
+      expect(lineup.step(modes[0], 1), modes[2]);
+      expect(lineup.step(modes[2], -1), modes[0]);
+      final last = modes[modes.length - 2];
+      expect(lineup.step(modes[0], -1), last);
+      expect(lineup.step(last, 1), modes[0]);
     });
 
     test('steps from a hidden mode to its nearest enabled neighbour', () {
-      final lineup = ModeLineup(hidden: {ColorMode.spectrum});
-      expect(lineup.step(ColorMode.spectrum, 1), ColorMode.pulse);
-      expect(lineup.step(ColorMode.spectrum, -1), ColorMode.disco);
+      final lineup = ModeLineup(hidden: {modes[1]});
+      expect(lineup.step(modes[1], 1), modes[2]);
+      expect(lineup.step(modes[1], -1), modes[0]);
     });
 
     test('never hides the last enabled mode', () {
@@ -41,13 +45,60 @@ void main() {
 
     test('moves modes using ReorderableListView indices', () {
       final down = ModeLineup().moved(0, 3);
-      expect(down.order.take(3), [
-        ColorMode.spectrum,
-        ColorMode.pulse,
-        ColorMode.disco,
-      ]);
+      expect(down.order.take(3), [modes[1], modes[2], modes[0]]);
       final up = ModeLineup().moved(2, 0);
-      expect(up.order.first, ColorMode.pulse);
+      expect(up.order.first, modes[2]);
+    });
+
+    test('an order saved before the default changed follows the new one', () {
+      final lineup = ModeLineup.fromNames(
+        order: [
+          'disco',
+          'spectrum',
+          'pulse',
+          'assorted',
+          'blackAndWhite',
+          'gradient',
+          'tiles',
+          'level',
+        ],
+        hidden: ['tiles'],
+      );
+      expect(lineup.order, ColorMode.values);
+      expect(lineup.hidden, {ColorMode.tiles});
+    });
+
+    test('so does a former default with newer modes appended', () {
+      final lineup = ModeLineup.fromNames(
+        order: [
+          'disco',
+          'spectrum',
+          'pulse',
+          'assorted',
+          'blackAndWhite',
+          'gradient',
+          'tiles',
+          'level',
+          'scope',
+          'starfield',
+          'tunnel',
+          'kaleido',
+        ],
+        hidden: const [],
+      );
+      expect(lineup.order, ColorMode.values);
+    });
+
+    test('a rearranged order is kept', () {
+      final lineup = ModeLineup.fromNames(
+        order: ['level', 'disco', 'spectrum'],
+        hidden: const [],
+      );
+      expect(lineup.order.take(3), [
+        ColorMode.level,
+        ColorMode.disco,
+        ColorMode.spectrum,
+      ]);
     });
 
     test('restores from names, dropping unknown and adding new modes', () {
@@ -87,8 +138,8 @@ void main() {
           home: Scaffold(
             body: Center(
               child: ModeSwitcher(
-                mode: ColorMode.pulse,
-                modes: ColorMode.values,
+                mode: modes.last,
+                modes: modes,
                 onStep: steps.add,
               ),
             ),
@@ -133,10 +184,12 @@ void main() {
         tester.getSemantics(find.byType(ModeSwitcher)),
         matchesSemantics(
           label: 'Color mode',
-          value: 'Pulse',
-          hint: 'Tap or swipe right for Assorted, swipe left for Spectrum.',
-          increasedValue: 'Assorted',
-          decreasedValue: 'Spectrum',
+          value: modes.last.label,
+          hint:
+              'Tap or swipe right for ${modes.first.label}, '
+              'swipe left for ${modes[modes.length - 2].label}.',
+          increasedValue: modes.first.label,
+          decreasedValue: modes[modes.length - 2].label,
           isButton: true,
           hasIncreaseAction: true,
           hasDecreaseAction: true,

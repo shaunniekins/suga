@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:suga/app/theme.dart';
@@ -29,6 +31,7 @@ void main() {
             level: level,
             bands: List.generate(24, (b) => (level + b / 48) % 1),
             beat: tick % 8 == 0,
+            wave: List.generate(64, (i) => level * sin(i / 3 + tick)),
           ),
         ]);
         await tester.pumpWidget(

@@ -49,7 +49,9 @@ Audio flows mic → `AudioAnalyzer` → `StageDirector` → `Stage` → visualiz
   (`models/mode_lineup.dart`): their order plus which are off, saved by
   `ModeLineupStore`. Step through modes with `lineup.step(mode, ±1)`, never
   `ColorMode.values`. A lineup always keeps at least one mode on.
-- To add a mode: add a value to `ColorMode` (label + icon), a widget in
+- To add a mode: add a value to `ColorMode` (label + icon) in its
+  alphabetical place by label (that's the default order; if you ever change
+  the order itself, add the old one to `ModeLineup._formerDefaults`), a widget in
   `widgets/visualizers/`, and a case in `Visualizer`'s switch. Saved
   lineups pick up new modes automatically (appended, switched on).
   `test/widget_test.dart` loops over `ColorMode.values` automatically.

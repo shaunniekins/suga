@@ -20,24 +20,39 @@ with color that moves with it, like a Winamp visualizer for the whole room.
 - **Every beat changes the light.** Colors come from club palettes (Neon,
   Sunset, Acid, Ocean, Fire) that shift one step on every beat. Every 16 beats
   the next palette takes over.
-- **Eight modes.** Tap the mode pill at the bottom of the screen, or swipe it
-  right, for the next mode; swipe it left for the previous one:
-  - **Disco:** colored beams sweep from a center light while mirror-ball
-    sparkles drift past; the room flashes the next color on each beat.
-  - **Spectrum:** Winamp-style bars from bass to treble with falling peak
-    caps and a floor reflection.
-  - **Pulse:** rings burst outward on every beat around a spinning circular
-    spectrum.
+- **Twelve modes.** Swipe right anywhere on the show, or tap the mode pill
+  at the bottom, for the next mode; swipe left for the previous one. On a
+  keyboard, use the arrow keys:
   - **Assorted:** jumps to a new hue on each beat; brightness follows
     loudness.
   - **Black & white:** flips between black and white on each beat.
+  - **Disco:** colored beams sweep from a center light while mirror-ball
+    sparkles drift past; the room flashes the next color on each beat.
   - **Gradient:** a radial glow in the palette's color that swells with
     loudness and kicks on the beat.
-  - **Tiles:** a mosaic that sparkles with loudness and bursts on each beat.
+  - **Kaleido:** the waveform bent into a ring and mirrored into twelve
+    slices, with the spectrum blooming inside.
   - **Level:** a full-screen LED meter with a falling peak marker.
+  - **Pulse:** rings burst outward on every beat around a spinning circular
+    spectrum.
+  - **Scope:** the live waveform as a glowing oscilloscope line, with a
+    fading phosphor trail.
+  - **Spectrum:** Winamp-style bars from bass to treble with falling peak
+    caps and a floor reflection.
+  - **Starfield:** stars stream out of the center, faster when it's louder,
+    surging forward on each beat.
+  - **Tiles:** a mosaic that sparkles with loudness and bursts on each beat.
+  - **Tunnel:** each moment's circular spectrum zooms outward and twists,
+    leaving trails like a feedback visualizer.
 - **Your lineup.** The **Customize modes** button (top right) lets you switch
   off modes you don't want and drag the rest into your own order. Suga
   remembers the lineup on the device. At least one mode always stays on.
+- **Music on the same phone.** The **Play music** button (top right) opens
+  Spotify, YouTube Music or Apple Music. Start a song out loud and come back:
+  Suga stops listening while it's in the background and starts again when
+  you return. It only opens the app; it never plays, controls or reads the
+  music, and needs no account or internet access. On the web the service
+  opens in a new tab.
 - **Immersive and awake.** The visualizer hides the system bars and keeps the
   screen on. Tap anywhere to show or hide the controls.
 - **Photosensitivity-safe.** Beats are capped below three per second (WCAG
@@ -51,10 +66,14 @@ with color that moves with it, like a Winamp visualizer for the whole room.
 2. Allow microphone access when asked. If you've blocked it before, Suga
    offers a shortcut to the app's settings.
 3. Play music or make some noise. Music with a clear kick drum gives the
-   strongest beats.
-4. Tap the screen to show the controls. Tap or swipe the mode pill to change
-   mode, tap **Customize modes** to choose and order them, and tap **×** or
-   go back to stop.
+   strongest beats. To play from this phone, tap **Play music**, pick an app,
+   start a song on the speaker (not headphones) and switch back to Suga.
+4. Tap the screen to show the controls. Swipe across the screen (or tap the
+   mode pill) to change mode, tap **Customize modes** to choose and order
+   them, and tap **×** or go back to stop. With a screen reader on, the
+   controls stay visible.
+5. On a keyboard: **←/→** change mode, **Space** shows or hides the
+   controls, **M** opens Play music and **Esc** stops.
 
 ---
 
@@ -258,9 +277,10 @@ flutter test
 ### How it works
 
 ```
-mic samples ──▶ AudioAnalyzer ──▶ AudioFrame (level, 24 bands, beat)
- (bursts)        FFT + auto gain        │  ~43 per second
-                 + beat detection       ▼
+mic samples ──▶ AudioAnalyzer ──▶ AudioFrame (level, 24 bands, beat,
+ (bursts)        FFT + auto gain        │   64-point waveform)
+                 + beat detection       │  ~43 per second
+                                        ▼
                                   StageDirector ──▶ Stage ──▶ visualizer
                                   paces frames to     (smoothed values, beat
                                   the display, 60 fps  count, palette, spin)
@@ -283,18 +303,21 @@ lib/
     palette.dart               Club palettes and the meter scale
     stage.dart                 Stage snapshot + StageDirector (pacing, smoothing)
   models/
-    color_mode.dart            The eight modes, with label, icon, default order
+    color_mode.dart            The twelve modes, with label, icon, default order
+    music_app.dart             Music apps the Play music sheet opens, with their links
     mode_lineup.dart           The user's order and on/off choice of modes
   services/
     microphone_audio*.dart     Raw mic samples: interface + device/web versions
     microphone_permission*.dart  Permission request: device/web versions
     mode_lineup_store.dart     Saves the lineup (shared_preferences)
+    music_launcher.dart        Opens a music app (url_launcher), never a browser on mobile
   screens/
     home_screen.dart           Lamp button, permission flow, reveal transition
     visualizer_screen.dart     Ticker loop, controls, mic errors
   widgets/
     mode_switcher.dart         The mode pill (tap, swipe)
     mode_lineup_sheet.dart     Customize sheet: switch off and reorder modes
+    music_apps_sheet.dart      Play music sheet: open Spotify, YouTube Music, Apple Music
     visualizers/               One widget per mode
 website/                       Landing page, privacy, terms (static HTML/CSS)
 store/                         Store graphics and the listing checklist

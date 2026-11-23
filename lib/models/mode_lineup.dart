@@ -15,16 +15,41 @@ class ModeLineup {
 
   /// Rebuilds a lineup from saved mode names. Unknown names are dropped, and
   /// modes added since it was saved are appended, switched on.
+  ///
+  /// An order the user never rearranged (a former default, perhaps with
+  /// modes added later appended) follows the current default instead; only
+  /// their on/off choices carry over.
   factory ModeLineup.fromNames({
     required List<String> order,
     required List<String> hidden,
   }) {
     final byName = ColorMode.values.asNameMap();
+    final untouched = _formerDefaults.any(
+      (old) =>
+          order.length >= old.length &&
+          listEquals(order.sublist(0, old.length), old) &&
+          order.skip(old.length).every((name) => !old.contains(name)),
+    );
     return ModeLineup(
-      order: [for (final name in order) ?byName[name]],
+      order: untouched ? null : [for (final name in order) ?byName[name]],
       hidden: {for (final name in hidden) ?byName[name]},
     );
   }
+
+  /// Default orders from earlier versions, as saved. Add the current one
+  /// here before changing [ColorMode]'s order again.
+  static const _formerDefaults = [
+    [
+      'disco',
+      'spectrum',
+      'pulse',
+      'assorted',
+      'blackAndWhite',
+      'gradient',
+      'tiles',
+      'level',
+    ],
+  ];
 
   /// Every mode, in [order], including hidden ones.
   final List<ColorMode> order;
