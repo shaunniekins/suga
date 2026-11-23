@@ -8,6 +8,7 @@ class AudioFrame {
     required this.level,
     required this.bands,
     required this.beat,
+    this.wave = const [],
   });
 
   /// Overall loudness, 0–1, relative to the recent loudest moment.
@@ -18,6 +19,10 @@ class AudioFrame {
 
   /// Whether a beat (kick, clap, sharp hit) starts in this window.
   final bool beat;
+
+  /// The window's waveform, downsampled to [AudioAnalyzer.wavePoints]
+  /// values between −1 and 1, with the same automatic gain as [level].
+  final List<double> wave;
 }
 
 /// Turns raw microphone samples into [AudioFrame]s: loudness, a log-spaced
@@ -38,6 +43,12 @@ class AudioAnalyzer {
 
   final int bandCount;
   final int fftSize;
+
+  /// Points in each frame's [AudioFrame.wave].
+  static const wavePoints = 64;
+
+  /// A loud waveform peaks around this many times its RMS level.
+  static const _crestFactor = 3.0;
   final Fft _fft;
   int _sampleRate;
 
@@ -171,7 +182,22 @@ class AudioAnalyzer {
     final beat = (bassHit || energyHit) && _framesSinceBeat >= gapFrames;
     if (beat) _framesSinceBeat = 0;
 
-    return AudioFrame(level: level, bands: bands, beat: beat);
+    // Waveform for scope-style modes: each point averages a short run of
+    // samples (a gentle low-pass, so the line doesn't fizz), scaled against
+    // the recent loudest moment like the level.
+    final gain = 1 / (_crestFactor * pow(10, _levelPeakDb / 20));
+    final run = fftSize ~/ wavePoints;
+    final wave = List<double>.filled(wavePoints, 0);
+    for (var p = 0; p < wavePoints; p++) {
+      var sum = 0.0;
+      final start = offset + p * run;
+      for (var i = start; i < start + run; i++) {
+        sum += _pending[i];
+      }
+      wave[p] = (sum / run * gain).clamp(-1.0, 1.0);
+    }
+
+    return AudioFrame(level: level, bands: bands, beat: beat, wave: wave);
   }
 
   static double _decibels(double amplitude) =>

@@ -5,10 +5,14 @@ import 'package:suga/widgets/visualizers/assorted_view.dart';
 import 'package:suga/widgets/visualizers/black_and_white_view.dart';
 import 'package:suga/widgets/visualizers/disco_view.dart';
 import 'package:suga/widgets/visualizers/gradient_view.dart';
+import 'package:suga/widgets/visualizers/kaleido_view.dart';
 import 'package:suga/widgets/visualizers/level_view.dart';
 import 'package:suga/widgets/visualizers/pulse_view.dart';
+import 'package:suga/widgets/visualizers/scope_view.dart';
 import 'package:suga/widgets/visualizers/spectrum_view.dart';
+import 'package:suga/widgets/visualizers/starfield_view.dart';
 import 'package:suga/widgets/visualizers/tiles_view.dart';
+import 'package:suga/widgets/visualizers/tunnel_view.dart';
 
 /// Renders [stage] in the style of [mode], filling all the space it's given.
 class Visualizer extends StatelessWidget {
@@ -34,6 +38,10 @@ class Visualizer extends StatelessWidget {
       ColorMode.gradient => GradientView(stage: stage),
       ColorMode.tiles => TilesView(stage: stage),
       ColorMode.level => LevelView(stage: stage),
+      ColorMode.scope => ScopeView(stage: stage),
+      ColorMode.starfield => StarfieldView(stage: stage),
+      ColorMode.tunnel => TunnelView(stage: stage),
+      ColorMode.kaleido => KaleidoView(stage: stage),
     };
   }
 }

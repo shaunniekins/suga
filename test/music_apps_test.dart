@@ -1,38 +1,19 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:suga/app/theme.dart';
 import 'package:suga/models/music_app.dart';
 import 'package:suga/screens/visualizer_screen.dart';
-import 'package:suga/services/microphone_audio.dart';
 
-class _FakeMicrophone implements MicrophoneAudio {
-  int listens = 0;
-  int cancels = 0;
-
-  @override
-  Stream<List<double>> get samples {
-    late final StreamController<List<double>> controller;
-    controller = StreamController<List<double>>(
-      onListen: () => listens++,
-      onCancel: () => cancels++,
-    );
-    return controller.stream;
-  }
-
-  @override
-  Future<int> get sampleRate async => 44100;
-}
+import 'fake_microphone.dart';
 
 void main() {
-  late _FakeMicrophone microphone;
+  late FakeMicrophone microphone;
   late List<MusicApp> opened;
 
   setUp(() {
     SharedPreferences.setMockInitialValues({});
-    microphone = _FakeMicrophone();
+    microphone = FakeMicrophone();
     opened = [];
   });
 

@@ -20,21 +20,30 @@ with color that moves with it, like a Winamp visualizer for the whole room.
 - **Every beat changes the light.** Colors come from club palettes (Neon,
   Sunset, Acid, Ocean, Fire) that shift one step on every beat. Every 16 beats
   the next palette takes over.
-- **Eight modes.** Tap the mode pill at the bottom of the screen, or swipe it
-  right, for the next mode; swipe it left for the previous one:
-  - **Disco:** colored beams sweep from a center light while mirror-ball
-    sparkles drift past; the room flashes the next color on each beat.
-  - **Spectrum:** Winamp-style bars from bass to treble with falling peak
-    caps and a floor reflection.
-  - **Pulse:** rings burst outward on every beat around a spinning circular
-    spectrum.
+- **Twelve modes.** Swipe right anywhere on the show, or tap the mode pill
+  at the bottom, for the next mode; swipe left for the previous one. On a
+  keyboard, use the arrow keys:
   - **Assorted:** jumps to a new hue on each beat; brightness follows
     loudness.
   - **Black & white:** flips between black and white on each beat.
+  - **Disco:** colored beams sweep from a center light while mirror-ball
+    sparkles drift past; the room flashes the next color on each beat.
   - **Gradient:** a radial glow in the palette's color that swells with
     loudness and kicks on the beat.
-  - **Tiles:** a mosaic that sparkles with loudness and bursts on each beat.
+  - **Kaleido:** the waveform bent into a ring and mirrored into twelve
+    slices, with the spectrum blooming inside.
   - **Level:** a full-screen LED meter with a falling peak marker.
+  - **Pulse:** rings burst outward on every beat around a spinning circular
+    spectrum.
+  - **Scope:** the live waveform as a glowing oscilloscope line, with a
+    fading phosphor trail.
+  - **Spectrum:** Winamp-style bars from bass to treble with falling peak
+    caps and a floor reflection.
+  - **Starfield:** stars stream out of the center, faster when it's louder,
+    surging forward on each beat.
+  - **Tiles:** a mosaic that sparkles with loudness and bursts on each beat.
+  - **Tunnel:** each moment's circular spectrum zooms outward and twists,
+    leaving trails like a feedback visualizer.
 - **Your lineup.** The **Customize modes** button (top right) lets you switch
   off modes you don't want and drag the rest into your own order. Suga
   remembers the lineup on the device. At least one mode always stays on.
@@ -59,9 +68,12 @@ with color that moves with it, like a Winamp visualizer for the whole room.
 3. Play music or make some noise. Music with a clear kick drum gives the
    strongest beats. To play from this phone, tap **Play music**, pick an app,
    start a song on the speaker (not headphones) and switch back to Suga.
-4. Tap the screen to show the controls. Tap or swipe the mode pill to change
-   mode, tap **Customize modes** to choose and order them, and tap **×** or
-   go back to stop.
+4. Tap the screen to show the controls. Swipe across the screen (or tap the
+   mode pill) to change mode, tap **Customize modes** to choose and order
+   them, and tap **×** or go back to stop. With a screen reader on, the
+   controls stay visible.
+5. On a keyboard: **←/→** change mode, **Space** shows or hides the
+   controls, **M** opens Play music and **Esc** stops.
 
 ---
 
@@ -265,9 +277,10 @@ flutter test
 ### How it works
 
 ```
-mic samples ──▶ AudioAnalyzer ──▶ AudioFrame (level, 24 bands, beat)
- (bursts)        FFT + auto gain        │  ~43 per second
-                 + beat detection       ▼
+mic samples ──▶ AudioAnalyzer ──▶ AudioFrame (level, 24 bands, beat,
+ (bursts)        FFT + auto gain        │   64-point waveform)
+                 + beat detection       │  ~43 per second
+                                        ▼
                                   StageDirector ──▶ Stage ──▶ visualizer
                                   paces frames to     (smoothed values, beat
                                   the display, 60 fps  count, palette, spin)
@@ -290,7 +303,7 @@ lib/
     palette.dart               Club palettes and the meter scale
     stage.dart                 Stage snapshot + StageDirector (pacing, smoothing)
   models/
-    color_mode.dart            The eight modes, with label, icon, default order
+    color_mode.dart            The twelve modes, with label, icon, default order
     music_app.dart             Music apps the Play music sheet opens, with their links
     mode_lineup.dart           The user's order and on/off choice of modes
   services/

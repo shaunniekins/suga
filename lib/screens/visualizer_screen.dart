@@ -42,6 +42,11 @@ class _VisualizerScreenState extends State<VisualizerScreen>
     with SingleTickerProviderStateMixin {
   static const _controlsTimeout = Duration(seconds: 3);
 
+  /// A drag this far, or a fling this fast, anywhere on the show changes
+  /// mode (matches the mode pill).
+  static const _swipeDistance = 48.0;
+  static const _swipeVelocity = 300.0;
+
   late final MicrophoneAudio _microphone =
       widget.microphone ?? createMicrophone();
   late final Ticker _ticker = createTicker(_onTick);
@@ -58,6 +63,7 @@ class _VisualizerScreenState extends State<VisualizerScreen>
   late Stage _stage;
   bool _controlsVisible = true;
   bool _micFailed = false;
+  double _drag = 0;
 
   @override
   void initState() {
@@ -170,16 +176,25 @@ class _VisualizerScreenState extends State<VisualizerScreen>
     _listen();
   }
 
+  /// Read from the platform, not MediaQuery, so it works in initState.
+  bool get _screenReaderOn => WidgetsBinding
+      .instance
+      .platformDispatcher
+      .accessibilityFeatures
+      .accessibleNavigation;
+
   void _showControls() {
     _hideControls?.cancel();
     setState(() => _controlsVisible = true);
+    // Screen reader users can't find controls that vanish; keep them up.
+    if (_screenReaderOn) return;
     _hideControls = Timer(_controlsTimeout, () {
       if (mounted) setState(() => _controlsVisible = false);
     });
   }
 
   void _toggleControls() {
-    if (_controlsVisible) {
+    if (_controlsVisible && !_screenReaderOn) {
       _hideControls?.cancel();
       setState(() => _controlsVisible = false);
     } else {
@@ -193,6 +208,20 @@ class _VisualizerScreenState extends State<VisualizerScreen>
       _mode = _lineup.step(_mode, step);
     });
     _showControls();
+  }
+
+  void _endSwipe(DragEndDetails details) {
+    final velocity = details.primaryVelocity ?? 0;
+    if (_lineup.enabled.length > 1) {
+      if (velocity.abs() >= _swipeVelocity) {
+        HapticFeedback.selectionClick();
+        _stepMode(velocity > 0 ? 1 : -1);
+      } else if (_drag.abs() >= _swipeDistance) {
+        HapticFeedback.selectionClick();
+        _stepMode(_drag > 0 ? 1 : -1);
+      }
+    }
+    _drag = 0;
   }
 
   void _changeLineup(ModeLineup lineup) {
@@ -224,11 +253,30 @@ class _VisualizerScreenState extends State<VisualizerScreen>
   Widget build(BuildContext context) {
     if (_micFailed) return _MicrophoneError(onRetry: _retry);
 
+    return CallbackShortcuts(
+      // Keyboard control for the web and tablets with keyboards.
+      bindings: {
+        const SingleActivator(LogicalKeyboardKey.arrowRight): () =>
+            _stepMode(1),
+        const SingleActivator(LogicalKeyboardKey.arrowLeft): () =>
+            _stepMode(-1),
+        const SingleActivator(LogicalKeyboardKey.space): _toggleControls,
+        const SingleActivator(LogicalKeyboardKey.keyM): _playMusic,
+        const SingleActivator(LogicalKeyboardKey.escape): () =>
+            Navigator.of(context).maybePop(),
+      },
+      child: Focus(autofocus: true, child: _buildShow(context)),
+    );
+  }
+
+  Widget _buildShow(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: _toggleControls,
+        onHorizontalDragUpdate: (details) => _drag += details.delta.dx,
+        onHorizontalDragEnd: _endSwipe,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -240,7 +288,9 @@ class _VisualizerScreenState extends State<VisualizerScreen>
               ),
               child: KeyedSubtree(
                 key: ValueKey(_mode),
-                child: Visualizer(mode: _mode, stage: _stage),
+                child: ExcludeSemantics(
+                  child: Visualizer(mode: _mode, stage: _stage),
+                ),
               ),
             ),
             SafeArea(

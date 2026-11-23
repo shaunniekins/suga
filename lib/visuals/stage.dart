@@ -15,6 +15,7 @@ class Stage {
     required this.beats,
     required this.pulse,
     required this.spin,
+    this.wave = const [],
   });
 
   factory Stage.silent(int bandCount) => Stage(
@@ -49,6 +50,9 @@ class Stage {
 
   /// Accumulated rotation in radians; turns faster when it's louder.
   final double spin;
+
+  /// The latest waveform, each point −1 to 1; empty before any sound.
+  final List<double> wave;
 
   Palette get palette => palettes[(beats ~/ beatsPerPalette) % palettes.length];
 
@@ -94,6 +98,8 @@ class StageDirector {
   final List<double> _bands;
   final List<double> _targets;
   final List<double> _peaks;
+  List<double> _targetWave = const [];
+  List<double> _wave = const [];
   double _framesDue = 0;
   double _level = 0;
   double _targetLevel = 0;
@@ -133,6 +139,13 @@ class StageDirector {
       _peaks[i] = max(_bands[i], _peaks[i] - _peakFallPerSecond * dt);
     }
     _level += (_targetLevel - _level) * (_targetLevel > _level ? rise : fall);
+    if (_wave.length != _targetWave.length) {
+      _wave = List.of(_targetWave);
+    } else {
+      for (var i = 0; i < _wave.length; i++) {
+        _wave[i] += (_targetWave[i] - _wave[i]) * rise;
+      }
+    }
     _pulse = max(0, _pulse - dt / _pulseSeconds);
     _spin += dt * (0.3 + 1.6 * _level) * (calm ? 0.25 : 1);
 
@@ -144,6 +157,7 @@ class StageDirector {
       beats: _beats,
       pulse: calm ? 0 : _pulse,
       spin: _spin,
+      wave: List.unmodifiable(_wave),
     );
   }
 
@@ -152,6 +166,7 @@ class StageDirector {
       _targets[i] = frame.bands[i];
     }
     _targetLevel = frame.level;
+    if (frame.wave.isNotEmpty) _targetWave = frame.wave;
     if (frame.beat) {
       _beats++;
       _pulse = 1;
