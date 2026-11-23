@@ -99,10 +99,10 @@ Turn music into light. A beat-reactive visualizer that fills your screen.
 Light that moves to the beat
 ```
 
-**Promotional text** — App Store (max 170 chars; currently 130; can change without a review)
+**Promotional text** — App Store (max 170 chars; currently 133; can change without a review)
 
 ```
-Put on a song and watch your screen light up to the beat. Eight modes, from disco beams to Winamp-style bars. Nothing is recorded.
+Put on a song and watch your screen light up to the beat. Twelve modes, from disco beams to Winamp-style scopes. Nothing is recorded.
 ```
 
 **Keywords** — App Store (max 100 bytes, comma-separated, no spaces after commas; currently 100)
@@ -111,7 +111,7 @@ Put on a song and watch your screen light up to the beat. Eight modes, from disc
 music,visualizer,light show,disco,party,beat,winamp,spectrum,equalizer,sound,lights,dj,club,rave,led
 ```
 
-**Full description** — Google Play and App Store (max 4,000 chars; currently ~2,090). On the App Store, write **Reduce Motion** instead of **remove animations**.
+**Full description** — Google Play and App Store (max 4,000 chars; currently ~2,310). On the App Store, write **Reduce Motion** instead of **remove animations**.
 
 ```
 Suga turns the sound in the room into light. Put on a song, set your phone down, and watch the screen pulse, sweep and glow in time with the music. It's like the music visualizers you remember from Winamp, but it listens through your microphone, so it works with anything you can hear: a speaker, a TV, a guitar, or a room full of people singing.
@@ -119,18 +119,22 @@ Suga turns the sound in the room into light. Put on a song, set your phone down,
 LIGHT THAT FOLLOWS THE BEAT
 Suga hears the kick drums and the claps and changes color on every beat. It follows the shape of the music too, from deep bass to bright treble, about forty times a second. Quiet background music and a loud party both get the full show, because Suga adjusts to the room.
 
-EIGHT MODES
-• Disco: colored beams sweep from a light in the middle, with mirror-ball sparkles
-• Spectrum: Winamp-style bars from bass to treble, with falling peaks
-• Pulse: a ring of color bursts outward on every beat
+TWELVE MODES
 • Assorted: a new color on every beat, brighter when it's louder
 • Black & white: the screen flips between black and white on the beat
+• Disco: colored beams sweep from a light in the middle, with mirror-ball sparkles
 • Gradient: a glow that swells with the music
-• Tiles: a mosaic that sparkles and bursts on the beat
+• Kaleido: the waveform mirrored into a kaleidoscope
 • Level: a full-screen LED meter
+• Pulse: a ring of color bursts outward on every beat
+• Scope: the live waveform as a glowing oscilloscope line
+• Spectrum: Winamp-style bars from bass to treble, with falling peaks
+• Starfield: fly through stars that surge on every beat
+• Tiles: a mosaic that sparkles and bursts on the beat
+• Tunnel: rings of sound zoom outward and twist
 
 YOUR SHOW, YOUR WAY
-• Tap or swipe the mode button to change mode
+• Swipe anywhere on the screen to change mode
 • Switch off the modes you don't want and put the rest in your own order
 • Five color palettes (Neon, Sunset, Acid, Ocean and Fire) that shift on every beat
 • Full screen, and the screen stays on while the show runs
