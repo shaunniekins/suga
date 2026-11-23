@@ -23,6 +23,7 @@ void main() {
         theme: buildSugaTheme(),
         home: VisualizerScreen(
           microphone: microphone,
+          showPlayMusic: true,
           openMusic: (app) async {
             opened.add(app);
             return installed;
@@ -80,6 +81,20 @@ void main() {
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
     tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     expect(microphone.listens, 2);
+
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(seconds: 5));
+  });
+
+  testWidgets('Play music is hidden by default', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildSugaTheme(),
+        home: VisualizerScreen(microphone: microphone),
+      ),
+    );
+    expect(find.byTooltip('Play music'), findsNothing);
+    expect(find.byTooltip('Customize modes'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
     await tester.pump(const Duration(seconds: 5));

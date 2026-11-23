@@ -26,6 +26,7 @@ class VisualizerScreen extends StatefulWidget {
     super.key,
     this.microphone,
     this.openMusic = openMusicApp,
+    this.showPlayMusic = false,
   });
 
   /// Injectable for tests; defaults to the device microphone.
@@ -33,6 +34,10 @@ class VisualizerScreen extends StatefulWidget {
 
   /// Opens a music app; injectable so tests don't leave the app.
   final MusicLauncher openMusic;
+
+  /// Whether the Play music button (and its M shortcut) is offered. Hidden
+  /// for now at the owner's request; the sheet and launcher stay ready.
+  final bool showPlayMusic;
 
   @override
   State<VisualizerScreen> createState() => _VisualizerScreenState();
@@ -261,7 +266,8 @@ class _VisualizerScreenState extends State<VisualizerScreen>
         const SingleActivator(LogicalKeyboardKey.arrowLeft): () =>
             _stepMode(-1),
         const SingleActivator(LogicalKeyboardKey.space): _toggleControls,
-        const SingleActivator(LogicalKeyboardKey.keyM): _playMusic,
+        if (widget.showPlayMusic)
+          const SingleActivator(LogicalKeyboardKey.keyM): _playMusic,
         const SingleActivator(LogicalKeyboardKey.escape): () =>
             Navigator.of(context).maybePop(),
       },
@@ -317,11 +323,12 @@ class _VisualizerScreenState extends State<VisualizerScreen>
                             mainAxisSize: MainAxisSize.min,
                             spacing: 12,
                             children: [
-                              _ControlButton(
-                                tooltip: 'Play music',
-                                icon: Icons.library_music_rounded,
-                                onPressed: _playMusic,
-                              ),
+                              if (widget.showPlayMusic)
+                                _ControlButton(
+                                  tooltip: 'Play music',
+                                  icon: Icons.library_music_rounded,
+                                  onPressed: _playMusic,
+                                ),
                               _ControlButton(
                                 tooltip: 'Customize modes',
                                 icon: Icons.tune_rounded,
