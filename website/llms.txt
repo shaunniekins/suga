@@ -17,16 +17,20 @@ Suga reacts to any sound it can hear (a speaker, a TV, a music app on another de
 
 ## Modes
 
-- Disco: colored beams sweep from a center light while mirror-ball sparkles drift by
-- Spectrum: Winamp-style bars from bass to treble, with falling peak caps
-- Pulse: a ring of color bursts out on every beat around a spinning spectrum
 - Assorted: a new color on every beat, brighter when the music is louder
 - Black & white: the whole screen flips between black and white on the beat
+- Disco: colored beams sweep from a center light while mirror-ball sparkles drift by
 - Gradient: a glow in the palette's color that swells with the music
-- Tiles: a mosaic that sparkles with sound and bursts on the beat
+- Kaleido: the waveform bent into a ring and mirrored twelve ways, with the spectrum blooming inside
 - Level: a full-screen LED meter with a peak marker that falls slowly
+- Pulse: a ring of color bursts out on every beat around a spinning spectrum
+- Scope: the live waveform as a glowing oscilloscope line, with a fading phosphor trail
+- Spectrum: Winamp-style bars from bass to treble, with falling peak caps
+- Starfield: stars stream out of the center, faster when it's louder, surging on every beat
+- Tiles: a mosaic that sparkles with sound and bursts on the beat
+- Tunnel: rings of the spectrum zoom outward and twist, leaving trails behind the music
 
-Users can switch modes by tapping or swiping the mode button, hide modes they don't use and reorder the rest. Five palettes (Neon, Sunset, Acid, Ocean and Fire) shift color on every beat. The show runs full screen and keeps the screen awake.
+Users can switch modes by swiping across the screen, tapping the mode button or pressing the arrow keys, hide modes they don't use and reorder the rest. Five palettes (Neon, Sunset, Acid, Ocean and Fire) shift color on every beat. The show runs full screen and keeps the screen awake.
 
 ## Good fits
 

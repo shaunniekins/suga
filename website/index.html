@@ -8,7 +8,7 @@
   <link rel="canonical" href="https://suga.shaunniekins.com/">
   <meta name="theme-color" content="#0E161D">
   <meta property="og:title" content="Suga — turn music into light">
-  <meta property="og:description" content="Put on a song and watch your screen light up to the beat. Eight modes, from disco beams to Winamp-style bars. Nothing is recorded.">
+  <meta property="og:description" content="Put on a song and watch your screen light up to the beat. Twelve modes, from disco beams to Winamp-style bars and oscilloscopes. Nothing is recorded.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Suga">
   <meta property="og:locale" content="en_US">
@@ -19,7 +19,7 @@
   <meta property="og:image:alt" content="Suga's colorful, beat-reactive light modes on a phone screen.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Suga — turn music into light">
-  <meta name="twitter:description" content="Put on a song and watch your screen light up to the beat. Eight modes, from disco beams to Winamp-style bars. Nothing is recorded.">
+  <meta name="twitter:description" content="Put on a song and watch your screen light up to the beat. Twelve modes, from disco beams to Winamp-style bars and oscilloscopes. Nothing is recorded.">
   <meta name="twitter:image" content="https://suga.shaunniekins.com/assets/og.jpg">
   <meta name="google-play-app" content="app-id=com.shaunniekins.suga">
   <link rel="alternate" type="text/plain" href="/llms.txt" title="Suga, summarized for AI assistants">
@@ -53,7 +53,7 @@
         "@type": "MobileApplication",
         "@id": "https://suga.shaunniekins.com/#android",
         "name": "Suga: Music Visualizer",
-        "description": "A beat-reactive music visualizer that listens through the microphone and fills the screen with light that moves with the music. Eight modes, from disco beams to Winamp-style spectrum bars. Nothing is recorded.",
+        "description": "A beat-reactive music visualizer that listens through the microphone and fills the screen with light that moves with the music. Modes from disco beams to Winamp-style spectrum bars. Nothing is recorded.",
         "operatingSystem": "Android",
         "applicationCategory": "MultimediaApplication",
         "applicationSubCategory": "Music visualizer",
@@ -176,25 +176,10 @@
     <section class="section" id="modes">
       <div class="wrap">
         <div class="section-head">
-          <h2>Eight ways to see a song.</h2>
-          <p>Tap the mode button, or swipe it, to change. Switch off the modes you skip and put the rest in your own order.</p>
+          <h2>Twelve ways to see a song.</h2>
+          <p>Swipe across the screen, or tap the mode button, to change. Switch off the modes you skip and put the rest in your own order.</p>
         </div>
         <ul class="modes">
-          <li class="mode">
-            <img src="/assets/screens/disco.webp" width="590" height="1278" loading="lazy" alt="">
-            <h3>Disco</h3>
-            <p>Colored beams sweep from a center light while mirror-ball sparkles drift by.</p>
-          </li>
-          <li class="mode">
-            <img src="/assets/screens/spectrum.webp" width="590" height="1278" loading="lazy" alt="">
-            <h3>Spectrum</h3>
-            <p>Winamp-style bars from bass to treble, with falling peak caps.</p>
-          </li>
-          <li class="mode">
-            <img src="/assets/screens/pulse.webp" width="590" height="1278" loading="lazy" alt="">
-            <h3>Pulse</h3>
-            <p>A ring of color bursts out on every beat around a spinning spectrum.</p>
-          </li>
           <li class="mode">
             <img src="/assets/screens/assorted.webp" width="590" height="1278" loading="lazy" alt="">
             <h3>Assorted</h3>
@@ -206,9 +191,44 @@
             <p>The whole screen flips between black and white on the beat.</p>
           </li>
           <li class="mode">
+            <img src="/assets/screens/disco.webp" width="590" height="1278" loading="lazy" alt="">
+            <h3>Disco</h3>
+            <p>Colored beams sweep from a center light while mirror-ball sparkles drift by.</p>
+          </li>
+          <li class="mode">
             <img src="/assets/screens/gradient.webp" width="590" height="1278" loading="lazy" alt="">
             <h3>Gradient</h3>
             <p>A glow in the palette's color that swells with the music.</p>
+          </li>
+          <li class="mode">
+            <img src="/assets/screens/kaleido.webp" width="590" height="1278" loading="lazy" alt="">
+            <h3>Kaleido</h3>
+            <p>The waveform bent into a ring and mirrored twelve ways, with the spectrum blooming inside.</p>
+          </li>
+          <li class="mode">
+            <img src="/assets/screens/level.webp" width="590" height="1278" loading="lazy" alt="">
+            <h3>Level</h3>
+            <p>A full-screen LED meter with a peak marker that falls slowly.</p>
+          </li>
+          <li class="mode">
+            <img src="/assets/screens/pulse.webp" width="590" height="1278" loading="lazy" alt="">
+            <h3>Pulse</h3>
+            <p>A ring of color bursts out on every beat around a spinning spectrum.</p>
+          </li>
+          <li class="mode">
+            <img src="/assets/screens/scope.webp" width="590" height="1278" loading="lazy" alt="">
+            <h3>Scope</h3>
+            <p>The live waveform as a glowing oscilloscope line, with a fading phosphor trail.</p>
+          </li>
+          <li class="mode">
+            <img src="/assets/screens/spectrum.webp" width="590" height="1278" loading="lazy" alt="">
+            <h3>Spectrum</h3>
+            <p>Winamp-style bars from bass to treble, with falling peak caps.</p>
+          </li>
+          <li class="mode">
+            <img src="/assets/screens/starfield.webp" width="590" height="1278" loading="lazy" alt="">
+            <h3>Starfield</h3>
+            <p>Stars stream out of the center, faster when it's louder, surging on every beat.</p>
           </li>
           <li class="mode">
             <img src="/assets/screens/tiles.webp" width="590" height="1278" loading="lazy" alt="">
@@ -216,9 +236,9 @@
             <p>A mosaic that sparkles with sound and bursts on the beat.</p>
           </li>
           <li class="mode">
-            <img src="/assets/screens/level.webp" width="590" height="1278" loading="lazy" alt="">
-            <h3>Level</h3>
-            <p>A full-screen LED meter with a peak marker that falls slowly.</p>
+            <img src="/assets/screens/tunnel.webp" width="590" height="1278" loading="lazy" alt="">
+            <h3>Tunnel</h3>
+            <p>Rings of the spectrum zoom outward and twist, leaving trails behind the music.</p>
           </li>
         </ul>
       </div>
@@ -253,7 +273,7 @@
           <li class="extra">
             <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></svg>
             <h3>Swipe to switch</h3>
-            <p>Swipe the mode button right for the next mode, left for the one before.</p>
+            <p>Swipe anywhere on the show: right for the next mode, left for the one before. On a keyboard, use the arrow keys.</p>
           </li>
           <li class="extra">
             <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2"/></svg>

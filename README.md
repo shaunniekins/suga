@@ -47,12 +47,6 @@ with color that moves with it, like a Winamp visualizer for the whole room.
 - **Your lineup.** The **Customize modes** button (top right) lets you switch
   off modes you don't want and drag the rest into your own order. Suga
   remembers the lineup on the device. At least one mode always stays on.
-- **Music on the same phone.** The **Play music** button (top right) opens
-  Spotify, YouTube Music or Apple Music. Start a song out loud and come back:
-  Suga stops listening while it's in the background and starts again when
-  you return. It only opens the app; it never plays, controls or reads the
-  music, and needs no account or internet access. On the web the service
-  opens in a new tab.
 - **Immersive and awake.** The visualizer hides the system bars and keeps the
   screen on. Tap anywhere to show or hide the controls.
 - **Photosensitivity-safe.** Beats are capped below three per second (WCAG
@@ -66,14 +60,14 @@ with color that moves with it, like a Winamp visualizer for the whole room.
 2. Allow microphone access when asked. If you've blocked it before, Suga
    offers a shortcut to the app's settings.
 3. Play music or make some noise. Music with a clear kick drum gives the
-   strongest beats. To play from this phone, tap **Play music**, pick an app,
-   start a song on the speaker (not headphones) and switch back to Suga.
+   strongest beats. Music from this phone's speaker works too: start it in
+   any app and switch back to Suga.
 4. Tap the screen to show the controls. Swipe across the screen (or tap the
    mode pill) to change mode, tap **Customize modes** to choose and order
    them, and tap **×** or go back to stop. With a screen reader on, the
    controls stay visible.
 5. On a keyboard: **←/→** change mode, **Space** shows or hides the
-   controls, **M** opens Play music and **Esc** stops.
+   controls and **Esc** stops.
 
 ---
 
@@ -317,7 +311,7 @@ lib/
   widgets/
     mode_switcher.dart         The mode pill (tap, swipe)
     mode_lineup_sheet.dart     Customize sheet: switch off and reorder modes
-    music_apps_sheet.dart      Play music sheet: open Spotify, YouTube Music, Apple Music
+    music_apps_sheet.dart      Play music sheet (hidden for now: VisualizerScreen.showPlayMusic)
     visualizers/               One widget per mode
 website/                       Landing page, privacy, terms (static HTML/CSS)
 store/                         Store graphics and the listing checklist
